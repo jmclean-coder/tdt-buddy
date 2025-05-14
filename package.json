@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "register": "node deploy/registerCommands.js"
   },
   "keywords": [],
   "author": "Joshua Mclean <joshmcleana@gmail.com>",
