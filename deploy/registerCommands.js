@@ -1,13 +1,30 @@
-// deploy/register-commands.js
+import { InteractionType, InteractionResponseType } from 'discord-interactions';
+
 require('dotenv').config();
 const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { Routes } = require('discord-api-types/v10');
 
 // Basic ping command for testing
 const commands = [
   {
     name: 'ping',
     description: 'Replies with Pong!',
+  },
+  {
+    name: 'info',
+    description: 'Get information about the bot',
+  },
+  {
+    name: 'test-verify',
+    description: 'Test the verification functionality',
+    options: [
+      {
+        name: 'code',
+        description: 'A test verification code',
+        type: InteractionType.MESSAGE_COMPONENT || 3,
+        required: true,
+      },
+    ],
   },
 ];
 
