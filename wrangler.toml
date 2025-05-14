@@ -1,0 +1,21 @@
+name = "tdt-buddy"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+DISCORD_APPLICATION_ID = "1371755124543852565"
+DISCORD_PUBLIC_KEY = "793b36b0b663a832940af5c04591bc958ba5173813d7ec2fb9d255a223270a3d"
+GUILD_ID = "1238345768209879060"
+
+# Use Cloudflare Workers KV for storage
+[[kv_namespaces]]
+binding = "BOT_STORAGE"
+id = "2eca340d04884992996dfa480a113325"
+# preview_id = "your-preview-kv-namespace-id"
+
+# Use Cloudflare Workers Secrets for sensitive values
+# These are set using `wrangler secret put DISCORD_TOKEN`
+# - DISCORD_TOKEN
+# - AIRTABLE_API_KEY
+# - AIRTABLE_BASE_ID
