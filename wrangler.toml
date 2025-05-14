@@ -14,6 +14,10 @@ binding = "BOT_STORAGE"
 id = "2eca340d04884992996dfa480a113325"
 # preview_id = "your-preview-kv-namespace-id"
 
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
+
 # Use Cloudflare Workers Secrets for sensitive values
 # These are set using `wrangler secret put DISCORD_TOKEN`
 # - DISCORD_TOKEN
