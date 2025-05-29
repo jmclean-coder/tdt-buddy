@@ -196,9 +196,9 @@ function formatSuccessMessage(record, year, roles, interaction) {
 
   // Next steps
   message += '**Next steps:**\n';
-  message += `- Check out the announcements channel for important updates\n`;
+  message += `- Check out the #announcements channel for important updates\n`;
   message += `- Introduce yourself in the #introductions channel\n`;
-  message += `- For rideshare and gear coordination, check the channels in the Planning Category\n`;
+  message += `- For coordinating ride and gearshares, visit the channels in the Planning Category\n`;
 
   return message;
 }
