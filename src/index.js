@@ -16,7 +16,7 @@ const EPHEMERAL_FLAG = 64;
 // Create a command map
 const commands = {
   'verify': verifyCommand,
-  'verification-help': verificationHelpCommand,
+  'verifyhelp': verificationHelpCommand,
   'createnewyear': createNewYearCommand,
   'archiveyear': archiveYearCommand,
 };
