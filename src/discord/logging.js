@@ -7,12 +7,12 @@ export async function logVerification(guildId, user, fields, eventYear, roles, e
   try {
     // Find the log channel
     const channels = await getGuildChannels(env);
-    console.log('Channels:', channels);
+    // console.log('Channels:', channels);
 
     const logChannel = channels.find(channel =>
       channel.name === 'verification-logs'
     );
-    console.log('Log channel:', logChannel);
+    // console.log('Log channel:', logChannel);
 
     if (!logChannel) {
       console.warn('No verification log channel found in the server');

@@ -294,7 +294,6 @@ export async function sendFollowUp(
   env,
   ephemeral = true // Default to ephemeral messages
 ) {
-  // const url = `${DISCORD_API_URL}/interactions/${interaction.id}/${interaction.token}/callback`;
   // debugger;
   console.log('sendFollowUp called with:', {
     content,
@@ -326,7 +325,7 @@ export async function sendFollowUp(
     body: JSON.stringify(messageData),
   });
 
-  console.log('response:', response);
+  // console.log('response:', response);
 
   if (!response.ok) {
     const errorText = await response.text();
