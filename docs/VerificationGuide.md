@@ -8,19 +8,13 @@ The verification process follows these specific steps:
 
 2. Code Validation:
 
-   * Bot searches Airtable for matching verification code
+   * Bot searches Airtable fora registration record with matching verification code
    * Checks if code has already been used
    * Verifies payment status is complete
 
 3. Role Assignment:
-
-    * Assigns year-specific attendee role (e.g., 2025-Attendee)
-    * Assigns Verified Member base role
-    * Assigns any additional roles based on Airtable flags:
-
-      * Staff role if Is Staff is true
-      * Volunteer role if Is Volunteer is true
-      * DJ role if Is DJ is true
+    * Assigns year-specific attendee role (e.g., 2025)
+    * Can extend to assign additional roles based on our needs / discord configuration
 
 4. Database Update:
 
@@ -38,8 +32,8 @@ The verification process follows these specific steps:
 
 6. Admin Logging:
 
-    * Logs successful verification to admin channel
-    * Includes user details and assigned roles
+    * Logs successful verification to verification-logs channel
+      * Includes user details and assigned roles
 
 ## Error Handling
 
@@ -57,7 +51,7 @@ The verification system includes comprehensive error handling:
 
 3. Payment Issues:
 
-    * If payment status is not "Completed"
+    * If payment status is not "Paid In Full" or "Payment Plan"
     * Prompts user to complete payment before verifying
 
 4. Missing Roles/Permissions:
@@ -70,44 +64,31 @@ The verification system includes comprehensive error handling:
       * Graceful handling of API failures or timeouts
       * Informative messages to contact staff for manual verification
 
-### Make.com Integration for Verification Codes
+### Make.com & Brevo Integration for Verification Codes <!--TK todo on accuracy of scenarios, backfilling scenarios and Brevo -->
 
-To complete the verification system, you'll need to set up an automation workflow in Make.com:
+Three automation workflows in Make.com support the verification system:
 3.1 Make.com Verification Workflow
 
 ```plaintext
 Make.com Scenario
-TRIGGER: New/Updated Record in Airtable
+TRIGGER: New Record in Airtable - on new registration submit.
 └── Filter: Payment Status = "Completed" AND Verification Code is empty
-    └── Generate Random Alphanumeric Code (8-16 characters)
+    └── Generate Random Alphanumeric Code (six characters)
         └── Update Airtable Record with Verification Code
             └── Create Email with Discord Invitation Link + Code
                 └── Send Email to Registrant
                     └── Log Action in "Communication Log" Table
 ```
 
-1. Create a new scenario in Make.com
-2. Add Airtable trigger watching for new records in your Registrations table
-3. Add a filter to only process records with completed payments and no verification code
-4. Add a "Set variable" module to generate a random verification code:
+# (USER FACING)How to Join Our Discord Community  <!-- shipped, awaiting edit and approval -->
 
-`{{toUpper(randomString(10, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"))}}`
-
-5. Add Airtable update module to save the verification code to the record
-6. Add email module configured with your event's email template (check how we send emails)
-7. Add final Airtable module to log the communication
-
-# (USER FACING)How to Join Our Discord Community
-
-After registering for the Dance & Camping Event, follow these steps to join our Discord community:
+After registering for the event, follow these steps to join our Discord community:
 
 ## Step 1: Join the Discord Server
 
 Click the invitation link sent to your email after registration.
 
 ## Step 2: Verify Your Registration
-
-Once in the server, you'll only see a few channels. To access all event channels:
 
 1. Type `/verify` in any channel
 2. Enter your unique verification code from your registration email
@@ -117,8 +98,6 @@ Once in the server, you'll only see a few channels. To access all event channels
 
 After successful verification:
 
-* You'll receive the appropriate roles
-* All relevant channels will become visible
 * You'll get a confirmation message with next steps
 
 ## Need Help?
