@@ -1,40 +1,47 @@
-/* eslint-disable no-inline-comments */
 import {
   verifyKey,
   InteractionType,
   InteractionResponseType,
 } from 'discord-interactions';
 
+// Import commands
+import * as verifyCommand from './commands/verification/verify.js';
+import * as verificationHelpCommand from './commands/verification/verificationHelp.js';
+import * as createNewYearCommand from './commands/admin/createnewyear.js';
+import * as archiveYearCommand from './commands/admin/archiveyear.js';
+
+
 const EPHEMERAL_FLAG = 64;
 
-// Command handler
-function handleCommand(interaction) {
-  const { name } = interaction.data;
-
-  // Simple command responses for testing
-  switch (name) {
-  case 'ping':
-    return {
-      type: 4, // CHANNEL_MESSAGE_WITH_SOURCE
-      data: {
-        content: 'Pong! Bot is responding correctly.',
-        flags: 64, // Ephemeral
-      },
-    };
-  default:
-    return {
-      type: 4,
-      data: {
-        content: `Command '${name}' not implemented yet.`,
-        flags: 64,
-      },
-    };
-  }
-}
+// Create a command map
+const commands = {
+  'verify': verifyCommand,
+  'verification-help': verificationHelpCommand,
+  'createnewyear': createNewYearCommand,
+  'archiveyear': archiveYearCommand,
+};
+// testing purposes
+// export default {
+//   async fetch(request, env, ctx) {
+//     // Add your ngrok URL here
+//     const ngrokUrl = 'ngrok-free.app/test-airtable';
+//     try {
+//       const resp = await fetch(ngrokUrl);
+//       const data = await resp.json();
+//       return new Response(JSON.stringify(data), {
+//         headers: { 'content-type': 'application/json' },
+//       });
+//     } catch (err) {
+//       return new Response('Error: ' + err.message, { status: 500 });
+//     }
+//   },
+// };
 
 export default {
   async fetch(request, env, ctx) {
     // console.log('Received request:', request.method);
+
+    // Only respond to POST requests
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
@@ -42,13 +49,11 @@ export default {
     // Verify the request is from Discord
     const signature = request.headers.get('x-signature-ed25519');
     const timestamp = request.headers.get('x-signature-timestamp');
-    // console.log('Signature headers:', { signature, timestamp });
-
     const body = await request.text();
+    // console.log('Signature headers:', { signature, timestamp });
     // console.log('Request body:', body);
 
     const isValidRequest = await verifyKey(
-      // awaits the verification. Important bug fix when updating the interaction url
       body,
       signature,
       timestamp,
@@ -72,12 +77,44 @@ export default {
       );
     }
 
-    // Handle command interactions
+    // Handle application commands (type 2)
     if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-      const response = handleCommand(interaction);
-      return new Response(JSON.stringify(response), {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const { name } = interaction.data;
+
+      try {
+        // Check if we have a handler for this command
+        if (commands[name]) {
+          const response = await commands[name].execute(interaction, env, ctx);
+          return new Response(JSON.stringify(response), {
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        // Unknown command
+        return new Response(JSON.stringify({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: `Command "${name}" not implemented.`,
+            flags: 64, // Ephemeral
+          },
+        }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+      }
+      catch (error) {
+        console.error(`Error handling command "${name}":`, error);
+
+        return new Response(JSON.stringify({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: 'An error occurred while processing your command.',
+            flags: 64, // Ephemeral
+          },
+        }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     // Fallback response
