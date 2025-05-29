@@ -16,10 +16,11 @@ const EPHEMERAL_FLAG = 64;
 // Create a command map
 const commands = {
   'verify': verifyCommand,
-  'verifyhelp': verificationHelpCommand,
+  'helpverify': verificationHelpCommand,
   'createnewyear': createNewYearCommand,
   'archiveyear': archiveYearCommand,
 };
+
 // testing purposes
 // export default {
 //   async fetch(request, env, ctx) {

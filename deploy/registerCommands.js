@@ -24,7 +24,7 @@ const commands = [
     ],
   },
   {
-    name: 'verification-help',
+    name: 'helpverify',
     description: 'Get help with the verification process',
   },
   {
